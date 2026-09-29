@@ -1,0 +1,38 @@
+# 贡献与维护规则（CONTRIBUTING）
+
+本文件约定 `UEDJudge`（UED 评价师）的协作治理：单一事实源、改动顺序、入库边界、分支与提交。
+
+## 一、单一事实源（Single Source of Truth）
+
+- **评估规范的事实源 = `skills/ued-judge/references/`**：评审流程（`critic-protocol.md`）、冻结评论员 prompt、硬性检查、问题标签、报告模板都以这里为准。修改 `critic-prompt.md` 会改变评分口径，须在 `PROJECT_CONTEXT.md` 记录原因。SKILL.md 是入口与铁律，不重复承载明细。
+- **上下文事实源 = `PROJECT_CONTEXT.md`**：项目目标、当前状态、关键结论、文件地图、待办。写给维护者，过程 / 根因 / 踩坑越细越好。
+- **对外说明事实源 = `README.md`**：仓库总览与用法，写给使用者。
+- 三者分工不重复维护；冲突时以对应事实源为准。
+
+## 二、改动顺序（先规范，后产物）
+
+1. 先改 `references/`（流程 / prompt / 检查项 / 模板）——规范先行。
+2. 再改 `SKILL.md` 的索引与铁律，使之指向最新规范。
+3. 用 `_tests/` 的案例验证评估效果。
+4. 更新 `PROJECT_CONTEXT.md`（状态 / 结论 / 文件地图 / 待办 + 变更日志一行）。
+5. 面向使用者的能力变化，追加到 `CHANGELOG.md`。
+
+## 三、入库边界
+
+- **随仓库提交**：`README.md`、`CHANGELOG.md`、`CONTRIBUTING.md`、`PROJECT_CONTEXT.md`、`AGENTS.md`、`.kiro/`、`docs/`、`skills/`。
+- **不入库**：`_tests/`（评测材料与产出物，属于验证材料，不是 skill 交付物；已在 `.gitignore` 排除）。
+
+## 四、CHANGELOG 与工程台账的分工
+
+- `CHANGELOG.md` 写给**使用者**：只写「这个版本多了什么能力、升级后有什么不一样」。
+- `PROJECT_CONTEXT.md` 写给**维护者**：过程、根因、逐项验证、返工修正、仓库工具与测试材料的调整都往这里放。
+
+## 五、协作约定（重要）
+
+- **不要替用户自动 `git commit` / `git push`**：只修改文件，提交与推送由用户手动操作。需要时可列出改动文件与建议的 commit message 供参考。
+- 台账及 `.kiro/` 属于项目配置，应随仓库提交，以保证跨机器同步与防丢失（由用户手动提交）。
+
+## 六、分支与提交
+
+- 功能改动走特性分支，不直接推 `main`（除非明确要求）。
+- 提交信息简洁准确，一条提交聚焦一件事。

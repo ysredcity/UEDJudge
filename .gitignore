@@ -1,0 +1,16 @@
+# 测试案例集与产出物（评测材料，非 skill 交付物，不入库）
+_tests/
+
+# skill 运行时临时文件（截图、备份）
+.ued-judge/
+
+# 系统与编辑器
+.DS_Store
+*.log
+
+# 依赖与构建产物（如后续引入脚本工具时）
+node_modules/
+dist/
+
+# Kiro 会话缓存
+.kiro/*.zip
