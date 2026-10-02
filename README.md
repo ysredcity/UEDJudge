@@ -17,6 +17,7 @@
 - **成本可预估**：评论员调用只要报告 1 次、一次性执行 3 次、逐阶段执行最多 5 次。
 - **人工把关**：报告输出后停下等你选择，选择前不改任何文件。
 - **保留功能与原意**：UI 优化最大程度保留原有功能和描述；文案仅在不改变原意时调整。优化前建立保真清单，优化后回归核验；功能删减或语义变化须单独授权。
+- **补足执行方法**：按需读取视觉、微动效与通用 Web 参考；主控建立视觉契约并验证交互时序、输入保护、恢复与布局韧性。运行规则在本地，无需安装外部 skill 或联网；W/M 结果不并入审美评分，冻结 prompt 不变。
 
 ## 目录结构
 
@@ -37,7 +38,10 @@ UEDJudge/
         ├── critic-prompt.md      # 冻结的评论员 prompt
         ├── hard-checks.md        # 硬性检查 H1–H12
         ├── glossary.md           # 问题标签与 AI 感套路
-        └── report-template.md    # 三种报告模板
+        ├── report-template.md    # 三种报告模板
+        ├── visual-optimization.md # 视觉执行方法
+        ├── motion-optimization.md # 微动效与 M 组验证
+        └── web-interface-quality.md # 通用 Web 与 W 组检查
 ```
 
 ## 快速开始

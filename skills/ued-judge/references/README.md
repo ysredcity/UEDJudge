@@ -9,6 +9,9 @@
 | `hard-checks.md` | 主控独立执行的硬性检查：H 组合规、G 组布局几何、A 组可机检反模式、L 组认知负荷计数 |
 | `glossary.md` | 问题标签与层级、评论员维度对应、界面类型口径、AI 感套路与常见通病（仅主控使用，不给评论员） |
 | `report-template.md` | 诊断报告、阶段复评简报、收尾报告模板 |
+| `visual-optimization.md` | 主控视觉设计契约与执行方法，视觉优化时按需读取 |
+| `motion-optimization.md` | 主控微动效策略与 M1–M5 工程验证，含动效或反馈/过渡改动时读取 |
+| `web-interface-quality.md` | 主控通用 Web 规则与 W1–W6 补充检查，检查关键路径及受影响区域 |
 
 改动顺序见根目录 [CONTRIBUTING.md](../../../CONTRIBUTING.md)。修改 `critic-prompt.md` 属于重大决策，须在 `PROJECT_CONTEXT.md` 记录原因。
 

@@ -38,6 +38,7 @@ Step 8 收尾双样本定分 → 收尾报告；较低换算分 ≥9 视为达�
 - 仅有截图输入时只出报告，不执行优化。
 - 执行优化前确认可回退（Git 工作区干净或已备份）。
 - **功能与文案意图保真**：最大程度保留原页面功能、描述与业务信息；文案仅在不改变原意时修改。优化前建立保真清单，优化后逐项核验；功能删减或语义变化须单独取得用户明确授权。详见协议 Step 5、7。
+- **执行方法与评分分离**：视觉优化先建立局部设计契约；微动效以状态反馈与因果解释为目的，靠实际交互验证，不用静态截图推断质量。通用 Web 与动效检查由主控独立完成，不改变冻结评分或追加阶段。
 
 ## 索引（references/）
 
@@ -48,3 +49,6 @@ Step 8 收尾双样本定分 → 收尾报告；较低换算分 ≥9 视为达�
 | [hard-checks.md](references/hard-checks.md) | 硬性检查 H 合规 / G 布局几何 / A 反模式 / L 认知负荷 | Step 4 与每次复评 |
 | [glossary.md](references/glossary.md) | 问题标签、维度对应、界面类型口径、AI 感套路与常见通病 | Step 5 归纳阶段、Step 7 确认修复方向 |
 | [report-template.md](references/report-template.md) | 诊断报告 / 阶段复评简报 / 收尾报告 | Step 6、7、8 |
+| [visual-optimization.md](references/visual-optimization.md) | 视觉契约、焦点、字体/色彩/表面/密度的执行方法 | Step 5、7 涉及视觉优化时 |
+| [motion-optimization.md](references/motion-optimization.md) | 微动效策略与 M 组工程验证，独立于截图评分 | Step 4 关键路径含动效，或 Step 5、7 涉及反馈/过渡时 |
+| [web-interface-quality.md](references/web-interface-quality.md) | 通用 Web 规则与 W 组补充检查 | Step 4 检查关键路径、Step 7 按受影响区域加载 |
