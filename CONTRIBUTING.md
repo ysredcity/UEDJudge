@@ -13,14 +13,24 @@
 
 1. 先改 `references/`（流程 / prompt / 检查项 / 模板）——规范先行。
 2. 再改 `SKILL.md` 的索引与铁律，使之指向最新规范。
-3. 用 `_tests/` 的案例验证评估效果。
+3. 用 `_tests/` 的案例验证评估效果。改冻结 prompt 时必须先做「校准集验证」（见下）。
 4. 更新 `PROJECT_CONTEXT.md`（状态 / 结论 / 文件地图 / 待办 + 变更日志一行）。
 5. 面向使用者的能力变化，追加到 `CHANGELOG.md`。
+6. 需要本机立即生效时，同步到安装目录（当前为 `~/.kiro/skills/ued-judge` → `~/.agents/skills/ued-judge`）：先备份到 `.ued-judge/backup/`，再 `rsync -a --delete --exclude .DS_Store skills/ued-judge/ <安装目录>/`，最后 `diff -rq` 确认一致。
+
+### 校准集验证（改 `critic-prompt.md` / `verifier-prompt.md` 前必做）
+
+冻结正文决定评分口径，改动前先在测试案例上验证，不能只做静态检查：
+
+1. 截图用 `skills/ued-judge/scripts/capture.mjs`，同一截图、同一使用途径、同一模型，候选正文至少评 3 次（条件允许时每个案例 5 次，覆盖至少 2 种界面类型）。
+2. 记录：各维度分极差、换算总分极差、两次及以上样本都提到的差距主题比例、首要差距是否一致。
+3. 现行参考目标：换算总分极差 ≤1.0（10 分制），各维度极差 ≤1。达不到时如实记录，由用户决定是否采用。
+4. 材料放 `_tests/experiments/<日期>-<主题>/`，结论与数据写入 `PROJECT_CONTEXT.md`，面向使用者的变化写 `CHANGELOG.md`。
 
 ## 三、入库边界
 
 - **随仓库提交**：`README.md`、`CHANGELOG.md`、`CONTRIBUTING.md`、`PROJECT_CONTEXT.md`、`AGENTS.md`、`.kiro/`、`docs/`、`skills/`。
-- **不入库**：`_tests/`（评测材料与产出物，属于验证材料，不是 skill 交付物；已在 `.gitignore` 排除）。
+- **不入库**：`_tests/`（评测材料与产出物，属于验证材料，不是 skill 交付物；已在 `.gitignore` 排除）；`.ued-judge/`（运行时截图、目标稿与备份）。
 
 ## 四、CHANGELOG 与工程台账的分工
 

@@ -11,4 +11,4 @@
 ## 命名约定
 建议按 `YYYY-MM-DD-<主题>.md` 命名，便于按时间检索。例如：`2026-09-29-evaluation-framework-plan.md`。
 
-> 当前为空目录占位。产出方案/蓝图时在此新增文档，并在 `PROJECT_CONTEXT.md` 文件地图与变更日志中登记。
+> 设计记录放在 `plans/`。新增方案/蓝图时在此目录新增文档，并在 `PROJECT_CONTEXT.md` 文件地图与变更日志中登记。
