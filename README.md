@@ -2,6 +2,8 @@
 
 **UED 评价师（UEDJudge）** 是一个给 AI agent 消费的 skill：对**已开发完成**的 Web 系统、网页做用户体验诊断，并按需分阶段优化。
 
+当前整体版本：`1.3.0`（以 [SKILL.md](./skills/ued-judge/SKILL.md) 的 `metadata.version` 为准）。
+
 ## 快速安装
 
 ### 方式一：让 AI 帮你安装（推荐新手）
@@ -65,6 +67,7 @@ UEDJudge/
 ├── AGENTS.md                     # 给不支持 skill 的工具的消费指引
 ├── .kiro/steering/context-management.md
 ├── docs/                         # 方案 / 决策记录
+├── releases/                     # 本地版本 ZIP 包（不入 Git）
 ├── _tests/                       # 测试案例与校准实验（不入 Git）
 └── skills/ued-judge/
     ├── SKILL.md                  # 入口：铁律 + 流程速览 + 索引
@@ -107,6 +110,12 @@ node "$PLAYWRIGHT_PATH/cli.js" install chromium
 ```
 
 `export` 只对当前终端及从中启动的进程生效；桌面工具未继承此变量时，把 Playwright 包的绝对路径交给 agent，让其在运行截图脚本时设置 `PLAYWRIGHT_PATH`。Windows 用户同样需要安装包和浏览器，并使用对应的 Windows 路径设置环境变量。
+
+## 版本规则
+
+采用 `x.y.z`：`x` 为大版本，`y` 为优化迭代，`z` 为问题修复。例如：修复 `1.3.1`，优化迭代 `1.4.0`，大版本 `2.0.0`；提升前一位时，后续位归零。
+
+整体版本与冻结评分正文版本独立：当前整体版本为 `1.3.0`，评分口径仍为 `v3.1`。ZIP 按整体版本命名，例如 `releases/ued-judge-1.3.0.zip`，仅在本地管理。
 
 ## 相关文档
 

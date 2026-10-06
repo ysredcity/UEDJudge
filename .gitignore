@@ -4,6 +4,9 @@ _tests/
 # skill 运行时临时文件（截图、备份）
 .ued-judge/
 
+# 本地版本 ZIP 包（不入库）
+/releases/
+
 # 系统与编辑器
 .DS_Store
 *.log
