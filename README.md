@@ -2,6 +2,38 @@
 
 **UED 评价师（UEDJudge）** 是一个给 AI agent 消费的 skill：对**已开发完成**的 Web 系统、网页做用户体验诊断，并按需分阶段优化。
 
+## 快速安装
+
+### 方式一：让 AI 帮你安装（推荐新手）
+
+复制下面的提示词，发送给 Codex、Manus 等具有联网和文件操作能力的智能体：
+
+```text
+请帮我安装 https://github.com/ysredcity/UEDJudge 中的 ued-judge skill。阅读 README，选择适合当前平台的安装方式，完成后验证并告诉我如何使用。如果平台不支持安装，请明确说明。
+```
+
+### 方式二：终端安装
+
+先安装 Node.js（包含 npm / npx）和 Git，然后在终端执行：
+
+```bash
+npx skills add ysredcity/UEDJudge --skill ued-judge --global
+```
+
+按提示选择你使用的 AI 工具与安装方式。`--global` 表示安装到用户目录，可跨项目使用；只想在当前项目使用时，在项目目录执行并去掉 `--global`。已安装同名 skill 且有本地修改时，先备份再确认替换。
+
+也可以明确指定工具，例如：
+
+```bash
+# Kiro CLI
+npx skills add ysredcity/UEDJudge --skill ued-judge --global --agent kiro-cli
+
+# Qoder
+npx skills add ysredcity/UEDJudge --skill ued-judge --global --agent qoder
+```
+
+安装后可用 `npx skills list --global` 查看安装结果；如当前会话尚未识别 skill，重新打开工具或新建会话。命令与工具标识见 [skills CLI 文档](https://github.com/vercel-labs/skills)。这些命令安装的是 GitHub 上的版本，不包含本地尚未推送的改动。
+
 ## 工作方式
 
 ```
@@ -52,10 +84,29 @@ UEDJudge/
 
 ## 快速开始
 
-把 `skills/ued-judge/SKILL.md` 交给支持 skill 的 agent，然后说「评估一下这个页面：<URL 或文件路径>」。
+安装后，在支持 skill 的 agent 中选择 `ued-judge`，然后说：
 
-- 截图需要 Playwright（`npx playwright install chromium`，首次安装约几分钟）；本机未全局安装时，用环境变量 `PLAYWRIGHT_PATH` 指向 playwright 包。没有截图能力时 agent 会请你手动提供截图。
-- 评论员与核验员需要 agent 支持创建独立子智能体（Kiro 中为 `invoke_sub_agent`）。
+```text
+使用 ued-judge 评估这个页面：<URL 或本地 HTML 的绝对路径>。
+先输出诊断报告，等我选择后再执行优化。
+```
+
+未安装时，也可把本仓库的 `skills/ued-judge/SKILL.md` 及同目录的 `references/`、`scripts/` 一并交给 agent。不要只复制入口文件，否则会缺少评审规则和截图脚本。
+
+### 运行条件
+
+- 评论员与核验员需要 agent 支持创建全新、隔离上下文的独立子智能体（Kiro 中为 `invoke_sub_agent`）。安装成功不代表工具一定具备完整执行能力。
+- 自动截图需要 Playwright 包和 Chromium 浏览器；仅执行 `npx playwright install chromium` 不保证截图脚本能找到 Playwright 包。没有截图能力时 agent 会请你手动提供截图。
+
+macOS / Linux 可将截图依赖安装在独立目录，不改被评估项目的依赖：
+
+```bash
+npm install --prefix "$HOME/.local/share/ued-judge" playwright
+export PLAYWRIGHT_PATH="$HOME/.local/share/ued-judge/node_modules/playwright"
+node "$PLAYWRIGHT_PATH/cli.js" install chromium
+```
+
+`export` 只对当前终端及从中启动的进程生效；桌面工具未继承此变量时，把 Playwright 包的绝对路径交给 agent，让其在运行截图脚本时设置 `PLAYWRIGHT_PATH`。Windows 用户同样需要安装包和浏览器，并使用对应的 Windows 路径设置环境变量。
 
 ## 相关文档
 
