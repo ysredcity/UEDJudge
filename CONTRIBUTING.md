@@ -8,6 +8,8 @@
 - **上下文事实源 = `PROJECT_CONTEXT.md`**：项目目标、当前状态、关键结论、文件地图、待办。写给维护者，过程 / 根因 / 踩坑越细越好。
 - **对外说明事实源 = `README.md`**：仓库总览与用法，写给使用者。
 - **整体版本事实源 = `skills/ued-judge/SKILL.md` 的 `metadata.version`**：用于对外版本展示、报告和 ZIP 命名；与冻结评分正文的版本独立。
+- **Pro 的独立版本 = `skills/ued-judge-pro/SKILL.md` 的 `metadata.version`**；Pro 报告交付规则只维护在该目录的 `references/report-delivery.md` / `report-data.md`，不改评分、保真或调用边界。
+- **共用规则不双份维护**：普通版 references 与 capture.mjs 仍是源；Pro 中对应文件是 `scripts/sync-pro-core.mjs` 自动生成副本，`core-manifest.json` 记录源版本与 SHA-256。不得手工改 Pro 共用副本，不依赖运行时相邻 skill 或软链。
 - 以上分工不重复维护；冲突时以对应事实源为准。
 
 ## 二、改动顺序（先规范，后产物）
@@ -18,6 +20,7 @@
 4. 更新 `PROJECT_CONTEXT.md`（状态 / 结论 / 文件地图 / 待办 + 变更日志一行）。
 5. 面向使用者的能力变化，追加到 `CHANGELOG.md`。
 6. 需要本机立即生效时，同步到安装目录（当前为 `~/.kiro/skills/ued-judge` → `~/.agents/skills/ued-judge`）：先备份到 `.ued-judge/backup/`，再 `rsync -a --delete --exclude .DS_Store skills/ued-judge/ <安装目录>/`，最后 `diff -rq` 确认一致。
+7. 共用规则变化后运行 `node scripts/sync-pro-core.mjs --write`，再 `--check`；发现删除或漂移须处理，不允许带过期副本发布。Pro 仅改报告模板时不改普通版。运行 `node --test tests/pro-report.test.mjs` 验证数据、派生展示、安全、独立交付及一致性；浏览器交互须另行实测。
 
 ### 校准集验证（改 `critic-prompt.md` / `verifier-prompt.md` 前必做）
 
@@ -30,7 +33,7 @@
 
 ## 三、入库边界
 
-- **随仓库提交**：`README.md`、`CHANGELOG.md`、`CONTRIBUTING.md`、`PROJECT_CONTEXT.md`、`AGENTS.md`、`.kiro/`、`docs/`、`skills/`。
+- **随仓库提交**：`README.md`、`CHANGELOG.md`、`CONTRIBUTING.md`、`PROJECT_CONTEXT.md`、`AGENTS.md`、`.kiro/`、`docs/`、`skills/`、`scripts/`、`tests/`（测试代码，不含案例截图/报告）。
 - **不入库**：`_tests/`（评测材料与产出物，属于验证材料，不是 skill 交付物；已在 `.gitignore` 排除）；`.ued-judge/`（运行时截图、目标稿与备份）；根目录 `releases/`（本地版本 ZIP 包，打包产物统一放这里管理）。
 
 ## 四、CHANGELOG 与工程台账的分工
@@ -55,3 +58,4 @@
 - 整体版本变更不自动重编号 critic / verifier 冻结正文，也不改变评分口径；确需修改冻结正文时仍执行校准协议。
 - ZIP 放根目录 `releases/`，命名为 `ued-judge-<x.y.z>.zip`；同一版本多个快照可附日期或构建标识，不用评分正文版本替代整体版本。保留旧包，不静默覆盖。
 - 包内顶层为 `ued-judge/`，包含完整 skill 目录；不含测试、依赖、仓库配置或系统缓存。打包前校验结构，打包后核对文件与内容；本地未提交改动须从当前文件打包，不能误用旧 HEAD。
+- Pro 独立打包为 `ued-judge-pro-<Pro x.y.z>.zip`，顶层 `ued-judge-pro/` 包含完整规则副本、manifest、脚本与 assets。先检查共享规则一致性，再打包；普通版不携带 Pro 模板。记录 Pro/core/冻结正文版本，不把三者混为同一版本。

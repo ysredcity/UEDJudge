@@ -12,3 +12,5 @@
 建议按 `YYYY-MM-DD-<主题>.md` 命名，便于按时间检索。例如：`2026-09-29-evaluation-framework-plan.md`。
 
 > 设计记录放在 `plans/`。新增方案/蓝图时在此目录新增文档，并在 `PROJECT_CONTEXT.md` 文件地图与变更日志中登记。
+
+- [UEDJudge Pro 设计与实施计划](plans/2026-10-07-ued-judge-pro.md)：独立交付、规则单源同步、两种报告与验证边界。

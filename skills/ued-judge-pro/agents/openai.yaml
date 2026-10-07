@@ -1,0 +1,4 @@
+interface:
+  display_name: "UEDJudge Pro"
+  short_description: "已有网页的 UED 诊断与优化，交付交互诊断和前后对照报告"
+  default_prompt: "使用 $ued-judge-pro 诊断这个已有页面，生成交互报告并等待我选择是否优化。"

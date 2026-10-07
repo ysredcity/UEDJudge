@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'sha256-{{SCRIPT_HASH}}'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+  <title>{{TITLE}}</title>
+  <style>{{STYLE}}</style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到报告内容</a>
+  <header class="masthead">
+    <a href="#main" class="brand">UED<span>Judge</span><small>PRO</small></a>
+    <p id="report-kind">交互评审报告</p>
+    <span class="local-label">本地报告 · 不联网</span>
+  </header>
+  <main id="main">
+    <section class="intro">
+      <p class="eyebrow" id="run-label"></p>
+      <h1 id="subject">{{TITLE}}</h1>
+      <p class="lede" id="summary">{{SUMMARY}}</p>
+      <div class="metadata" id="metadata"></div>
+      <details class="context"><summary>评估对象与使用途径</summary><pre id="context"></pre></details>
+    </section>
+    <div id="interactive" hidden>
+      <nav class="report-nav" aria-label="报告章节">
+        <a href="#evidence">画面与问题</a><a href="#conclusions">评审结论</a><a href="#plan">改进阶段</a><a href="#reference-score">参考评分</a><a href="#complete-report">完整报告</a><a href="#decision" id="decision-link">选择下一步</a>
+      </nav>
+      <section class="workspace" id="evidence" aria-labelledby="evidence-title">
+        <div class="section-heading"><div><p class="eyebrow">01 / EVIDENCE</p><h2 id="evidence-title">画面与问题</h2></div><p id="capture-note"></p></div>
+        <div class="evidence-grid">
+          <div class="viewer">
+            <div class="viewer-toolbar">
+              <label class="control">截图对照<select id="shot-select"></select></label>
+              <div class="button-group" role="group" aria-label="查看方式" id="layout-control"><button type="button" id="side-by-side" aria-pressed="true">并排</button><button type="button" id="single" aria-pressed="false">单张</button></div>
+              <label class="control" id="phase-control" hidden>查看版本<select id="phase-select"><option value="before">优化前</option><option value="after">优化后</option></select></label>
+              <button type="button" id="zoom" aria-pressed="false">实际尺寸</button>
+            </div>
+            <div id="screens" class="screens"></div>
+            <p class="viewer-note" id="location-note">选择问题可定位证据。截图不运行原页面，缩放不代表响应式验证。</p>
+          </div>
+          <aside class="issue-panel" aria-labelledby="issues-title">
+            <div class="issue-heading"><h3 id="issues-title">差距清单</h3><span id="issue-count"></span></div>
+            <div class="filters">
+              <label class="control">严重度<select id="severity"><option value="all">全部</option><option>P0</option><option>P1</option><option>P2</option><option>P3</option></select></label>
+              <label class="control">置信度<select id="confidence"><option value="all">全部</option><option>高</option><option>低</option></select></label>
+              <label class="control">阶段<select id="stage-filter"><option value="all">全部</option></select></label>
+              <label class="control" id="verification-filter" hidden>核验状态<select id="verified"><option value="all">全部</option><option>已解决</option><option>部分解决</option><option>未解决</option><option>无法判断</option></select></label>
+            </div>
+            <p class="small">筛选仅影响浏览，不改变问题或执行范围。</p>
+            <div id="issues"></div>
+            <button type="button" class="text-button" id="reset-filters">显示全部问题</button>
+          </aside>
+        </div>
+      </section>
+      <section id="conclusions" class="report-section">
+        <div class="section-heading"><div><p class="eyebrow">02 / FINDINGS</p><h2>评审结论与边界</h2></div><p>判断、证据与未知项分别保留</p></div>
+        <div id="goal"></div><div id="verification"></div><div id="pair-results"></div>
+        <div id="checks"></div><div id="sections" class="section-grid"></div>
+      </section>
+      <section id="plan" class="report-section">
+        <div class="section-heading"><div><p class="eyebrow">03 / PLAN</p><h2>改进阶段</h2></div><p>方案来自诊断，不在报告里重新规划</p></div>
+        <div id="stages"></div>
+      </section>
+      <section id="reference-score" class="report-section">
+        <div class="section-heading"><div><p class="eyebrow">04 / REFERENCE</p><h2>参考评分</h2></div><p>不以两次绝对分之差判定改进</p></div>
+        <div id="scores"></div><div id="score-notes" class="notice"></div>
+      </section>
+      <section id="decision" class="report-section decision">
+        <div><p class="eyebrow">NEXT / YOUR CHOICE</p><h2 id="decision-title">选择下一步</h2><p id="decision-description">这里的选择不会执行优化。复制指令后，粘贴回 Agent 对话。</p></div>
+        <div class="decision-form">
+          <fieldset id="mode-options"><legend>执行方式</legend><label><input type="radio" name="mode" value="report" checked>只要报告</label><label><input type="radio" name="mode" value="staged">逐阶段执行</label><label><input type="radio" name="mode" value="all">一次性执行</label></fieldset>
+          <fieldset id="stage-options"><legend>执行范围（保留原有阶段顺序与依赖）</legend><div id="stage-choices"></div></fieldset>
+          <label class="control notes-control">备注<textarea id="notes" rows="3" placeholder="希望保留什么，或对方案有哪些补充？"></textarea></label>
+          <p id="draft-state" class="small" role="status"></p>
+          <details><summary>查看待复制指令</summary><pre id="feedback-preview"></pre></details>
+          <div class="actions"><button type="button" class="primary" id="copy-feedback">复制给 Agent 的指令</button><button type="button" id="clear-draft">清除本页草稿</button></div>
+          <div id="copy-fallback" hidden><label class="control">复制未成功，请选择文本手动复制<textarea id="manual-copy" rows="6" readonly></textarea></label></div>
+        </div>
+      </section>
+      <section class="report-section" id="raw-reviews"><h2>原始评语</h2><p class="small">保留原判定，不用展示摘要替代。</p><div id="reviews"></div></section>
+    </div>
+    <section class="report-section" id="complete-report"><details open><summary>完整文字报告</summary><pre>{{FULL_REPORT}}</pre></details></section>
+    <noscript><p class="notice">脚本未启用：可阅读上方完整报告。需要继续时，在 Agent 对话选择只要报告、逐阶段执行或一次性执行。</p></noscript>
+  </main>
+  <footer>UEDJudge Pro · 报告可能包含业务截图与评语，分享前请检查敏感信息。报告与备注不会上传。</footer>
+  <p id="toast" class="toast" role="status" aria-live="polite" hidden></p>
+  <script type="application/json" id="report-data">{{DATA}}</script>
+  <script>{{SCRIPT}}</script>
+</body>
+</html>

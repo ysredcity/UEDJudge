@@ -2,7 +2,20 @@
 
 **UED 评价师（UEDJudge）** 是一个给 AI agent 消费的 skill：对**已开发完成**的 Web 系统、网页做用户体验诊断，并按需分阶段优化。
 
-当前整体版本：`1.3.0`（以 [SKILL.md](./skills/ued-judge/SKILL.md) 的 `metadata.version` 为准）。
+普通版当前整体版本：`1.3.0`（以 [SKILL.md](./skills/ued-judge/SKILL.md) 的 `metadata.version` 为准）。
+
+## 选择普通版或 Pro
+
+| | UEDJudge | UEDJudge Pro |
+|---|---|---|
+| Skill | `ued-judge` | `ued-judge-pro` |
+| 评审、优化与调用上限 | 同一套规则 | 同一套规则 |
+| 诊断交付 | 对话文字报告 | 本地交互诊断报告＋对话摘要 |
+| 优化收尾 | 对话文字报告 | 本地前后对照报告＋对话摘要 |
+
+普通版保持轻量；Pro `1.0.0` 可单独安装，共用核心 `1.3.0` 与冻结评分口径 `v3.1`，不额外评分、不默认生成多套改版。两个 skill 独立版本，Pro 不代表评分标准更高。
+
+Pro 报告支持截图定位、问题筛选、阶段选择、备注复制和前后对照。网页的选择只是草稿，需要粘贴回 Agent 才继续执行；依然先诊断、停下、再优化。HTML 离线可浏览，不上传截图/备注；报告可能包含业务信息，分享前请检查。平台不能预览时提供对话摘要和文件，不能安装或缺少隔离评委时仍须明确能力限制。
 
 ## 快速安装
 
@@ -20,6 +33,12 @@
 
 ```bash
 npx skills add ysredcity/UEDJudge --skill ued-judge --global
+```
+
+需要 Pro 时，将上方提示词中的 skill 名称换为 `ued-judge-pro`，或执行：
+
+```bash
+npx skills add ysredcity/UEDJudge --skill ued-judge-pro --global
 ```
 
 按提示选择你使用的 AI 工具与安装方式。`--global` 表示安装到用户目录，可跨项目使用；只想在当前项目使用时，在项目目录执行并去掉 `--global`。已安装同名 skill 且有本地修改时，先备份再确认替换。
@@ -69,20 +88,26 @@ UEDJudge/
 ├── docs/                         # 方案 / 决策记录
 ├── releases/                     # 本地版本 ZIP 包（不入 Git）
 ├── _tests/                       # 测试案例与校准实验（不入 Git）
-└── skills/ued-judge/
-    ├── SKILL.md                  # 入口：铁律 + 流程速览 + 索引
-    ├── scripts/capture.mjs       # 固定参数截图：总览 + 视口切片
-    └── references/
-        ├── critic-protocol.md    # 完整流程（唯一事实源）
-        ├── critic-prompt.md      # 冻结评论员 prompt（绝对评分 / 成对比较）
-        ├── verifier-prompt.md    # 冻结核验员 prompt
-        ├── hard-checks.md        # 硬性检查 H / G / A / L
-        ├── glossary.md           # 问题标签与 AI 感套路
-        ├── report-template.md    # 三种报告模板
-        ├── execution-constraints.md # 执行约束 X1–X15
-        ├── visual-optimization.md # 视觉执行方法
-        ├── motion-optimization.md # 微动效与 M 组验证
-        └── web-interface-quality.md # 通用 Web 与 W 组检查
+├── skills/ued-judge/              # 普通版，共用规则维护源
+│   ├── SKILL.md                  # 入口：铁律 + 流程速览 + 索引
+│   ├── scripts/capture.mjs       # 固定参数截图：总览 + 视口切片
+│   └── references/
+│       ├── critic-protocol.md    # 完整流程（唯一事实源）
+│       ├── critic-prompt.md      # 冻结评论员 prompt（绝对评分 / 成对比较）
+│       ├── verifier-prompt.md    # 冻结核验员 prompt
+│       ├── hard-checks.md        # 硬性检查 H / G / A / L
+│       ├── glossary.md           # 问题标签与 AI 感套路
+│       ├── report-template.md    # 三种报告模板
+│       ├── execution-constraints.md # 执行约束 X1–X15
+│       ├── visual-optimization.md # 视觉执行方法
+│       ├── motion-optimization.md # 微动效与 M 组验证
+│       └── web-interface-quality.md # 通用 Web 与 W 组检查
+└── skills/ued-judge-pro/          # 独立 Pro 交付包
+    ├── SKILL.md / core-manifest.json
+    ├── agents/openai.yaml
+    ├── references/              # 自动同步的共用规则＋Pro 报告协议/数据格式
+    ├── scripts/                 # 共用 capture＋数据校验/报告生成器
+    └── assets/                  # 固定离线 HTML/CSS/JS 模板
 ```
 
 ## 快速开始
@@ -95,6 +120,15 @@ UEDJudge/
 ```
 
 未安装时，也可把本仓库的 `skills/ued-judge/SKILL.md` 及同目录的 `references/`、`scripts/` 一并交给 agent。不要只复制入口文件，否则会缺少评审规则和截图脚本。
+
+使用 Pro：
+
+```text
+使用 ued-judge-pro 诊断这个页面：<URL 或本地 HTML 的绝对路径>。
+生成交互诊断报告，等我选择后再优化；优化完成后生成前后对照报告。
+```
+
+未安装 Pro 时交付完整 `skills/ued-judge-pro/`，包含 assets 和 core-manifest.json；不需要普通版相邻目录。报告默认放在被评估项目的 `.ued-judge/reports/<run-id>/`，输出后会提供文件入口和对话摘要。
 
 ### 运行条件
 
