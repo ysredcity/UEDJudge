@@ -49,6 +49,8 @@ Step 8 收尾：核验员逐条核对 G1…Gn + 成对比较 + 一次绝对评�
 
 ## 索引（references/ 与 scripts/）
 
+核心流程与检查仍按步骤读取；视觉、动效、Web 质量三份执行参考仅在对应问题出现或获批目标涉及该方面时由主控加载，不要求每次全读。它们提供选择依据与案例，不是额外扣分规则、组件模板或新的执行授权，不传给评论员。
+
 | 文档 | 用途 | 何时读 |
 |---|---|---|
 | [critic-protocol.md](references/critic-protocol.md) | 全流程、角色、维度判定、务实目标、隔离规则、成本上限 | 每次使用都读 |
@@ -58,7 +60,7 @@ Step 8 收尾：核验员逐条核对 G1…Gn + 成对比较 + 一次绝对评�
 | [glossary.md](references/glossary.md) | 问题标签、维度对应、界面类型口径、AI 感套路与常见通病、修复方向 | Step 5 归纳阶段、Step 5.5 确认修复方向 |
 | [report-template.md](references/report-template.md) | 诊断报告 / 阶段复评简报 / 收尾报告 | Step 6、7、8 |
 | [execution-constraints.md](references/execution-constraints.md) | 执行约束 X1–X15、保真细则、实测教训附录 | Step 5.5、Step 7 |
-| [visual-optimization.md](references/visual-optimization.md) | 视觉契约、焦点、字体/色彩/表面/密度的执行方法 | 写目标稿与执行视觉改动时 |
-| [motion-optimization.md](references/motion-optimization.md) | 微动效策略与 M 组工程验证，独立于截图评分 | 关键路径含动效，或涉及反馈/过渡时 |
-| [web-interface-quality.md](references/web-interface-quality.md) | 通用 Web 规则与 W 组补充检查 | Step 4 检查关键路径、Step 7 按受影响区域 |
+| [visual-optimization.md](references/visual-optimization.md) | 视觉契约、配色/表面层级、低噪控件识别、指标整体性与密度 | 配色单调、强调混乱、分组松散、控件偏大或目标涉及视觉关系时 |
+| [motion-optimization.md](references/motion-optimization.md) | 展开收起、筛选更新、短操作反馈、异步操作四类案例与 M 组验证 | 关键路径含动效，或反馈、过渡、连续操作存在问题时；静态截图不代替时序验证 |
+| [web-interface-quality.md](references/web-interface-quality.md) | W 组补充检查与响应式根因排查 | 关键路径涉及输入、异步、导航或性能问题，或窄屏/缩放/内容变化导致布局故障时 |
 | [scripts/capture.mjs](scripts/capture.mjs) | 固定参数截图：整页总览 + 视口切片 | Step 2 与每次复评前 |

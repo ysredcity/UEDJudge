@@ -17,6 +17,10 @@ description: "UEDJudge Pro：对已有 Web 页面做与 UEDJudge 相同的隔离
 
 三条铁律与普通版相同：**诊断后停下，用户选择执行才优化；评论员全新隔离，只拿中性截图与使用途径；调用上限 2 / 5 / ≤7。** 不把报告界面、标注、分数、用户选择或备注交给评论员。网页内的选择只是草稿，用户复制回对话后才处理后续请求；不自动执行、回退、提交或推送。
 
+## 执行参考按问题加载
+
+主控按当前问题查阅共用副本，不要求每次读完三份参考：配色、表面层级、低噪控件识别、指标整体性或密度问题见 [visual-optimization.md](references/visual-optimization.md)；展开、筛选更新、短操作反馈或异步过渡见 [motion-optimization.md](references/motion-optimization.md)；输入、导航、性能或响应式故障见 [web-interface-quality.md](references/web-interface-quality.md)。这些是方法参考，不新增评分、阶段、确认闸门或组件模板，不传给评论员；核心流程与检查仍按协议逐步读取。
+
 ## 报告交付覆盖
 
 - Step 6：生成 `./.ued-judge/reports/<run-id>/diagnosis.html`，对话给出结论、关键差距、报告入口和普通版三个选项，**结束本轮回复**。诊断仅展示原始截图，不提前生成优化稿。

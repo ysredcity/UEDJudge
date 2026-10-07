@@ -6,14 +6,14 @@
     "references/README.md": "6ccb51b7c6c028989c0d3096ec9eb149f0d47874003758945f8ebe8b666aeff8",
     "references/critic-prompt.md": "7e82c969eb498bf7732dc570fb5fd3f1efaf4dfb73257bda0e8075b994c6dacc",
     "references/critic-protocol.md": "6000136664affeae320bc027ced95f8beff778a4e19b6714f7475c657108c3c8",
-    "references/execution-constraints.md": "80b2585722e11ce6852f354e177b8bdff335ca4c004f67ce37587fa63ab4c441",
-    "references/glossary.md": "9ccf103cba8c46097b53052e9d3ba7ec5d4a046ba09ff73442f45592c7e6a4a0",
-    "references/hard-checks.md": "0e7c044321df38be455cc522fcb419dc7f2be94fbf49f5c79b3ae0a77dd1cdfa",
-    "references/motion-optimization.md": "395d7b1042d1f36c41c83d7741084ccb6e4465bf763d4c350783d366679da5fa",
+    "references/execution-constraints.md": "64fdef6249f1065caac680ca2d5ca87cf86bdbc4748d80c31bb6aea0b95a02f6",
+    "references/glossary.md": "2ad41a8458d0c2c907a67eb782d01cd57cdbf305b8225d6d372738c5201217aa",
+    "references/hard-checks.md": "e895f0f23631a28cfc647e0ea1671dff5cb9dd7fa5c5cdac8794fb43ae4b3109",
+    "references/motion-optimization.md": "a26708b3c826a97b3d49fa1f17b87d80f3626c804181717ccc58a5f28ea1aac8",
     "references/report-template.md": "134e84f03c89a41a9892b7798779a0d778c52acc761cf712c06b52536f04c345",
     "references/verifier-prompt.md": "eccb348a57cf3a224b7754ac10f9b28b1a3119112d6a7ffbe1c5c5bc94c2b6e5",
-    "references/visual-optimization.md": "775f4f4c7e4289e331a151973d37eebf6f5a77ee595e8a62d7e5098a9c7eb3f4",
-    "references/web-interface-quality.md": "fbff9b734eac13b39e02cdaf628679c4adbb90444ce2570a4c20b980def78519",
+    "references/visual-optimization.md": "7e2b28bfa1977bc7ade99dc5918570379e1a6bd03382df0e6be75798de58264a",
+    "references/web-interface-quality.md": "8fade297fd10b2a9305f771526508c9860d623f2623eb3ce1dac4e9c762e79ae",
     "scripts/capture.mjs": "a6a24d68f8c1f95a64c1ee0e50c12682495b6687e76c4ab9ac9167df11cd7b84"
   }
 }
