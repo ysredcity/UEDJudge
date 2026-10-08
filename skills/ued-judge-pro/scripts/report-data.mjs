@@ -103,7 +103,10 @@ export function validateReport(data) {
   array(data.sections, 'sections');
   const required = data.kind === 'diagnosis' ? ['critic', 'checks', 'protection', 'fidelity', 'limits', 'data', 'stages'] : ['goal', 'verification', 'pair', 'fidelity', 'protection', 'checks', 'remaining', 'limits', 'motion', 'changes', 'scoreNotes'];
   unique(data.sections.map(s => s.id), '内容段落');
-  for (const section of data.sections) { id(section.id, 'section.id'); text(section.title, 'section.title'); text(section.body, 'section.body'); }
+  for (const section of data.sections) {
+    id(section.id, 'section.id'); text(section.title, 'section.title'); text(section.body, 'section.body');
+    if (section.summary !== undefined) text(section.summary, 'section.summary');
+  }
   for (const section of required) if (!data.sections.some(s => s.id === section)) fail(`缺少报告内容 ${section}`);
   array(data.rawReviews, 'rawReviews');
   if (data.rawReviews.length < (data.kind === 'diagnosis' ? 2 : 3)) fail('原始评语缺失（格式不完整样本也照实保留）');

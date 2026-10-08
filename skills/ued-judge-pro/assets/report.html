@@ -60,16 +60,17 @@
       </section>
       <section id="plan" class="report-section">
         <div class="section-heading"><div><p class="eyebrow">03 / PLAN</p><h2>改进阶段</h2></div><p>方案来自诊断，不在报告里重新规划</p></div>
-        <div id="stages"></div>
+        <details id="stage-details" open><summary id="stage-summary">阶段动作与目标</summary><div id="stages"></div></details>
       </section>
       <section id="reference-score" class="report-section">
         <div class="section-heading"><div><p class="eyebrow">04 / REFERENCE</p><h2>参考评分</h2></div><p>不以两次绝对分之差判定改进</p></div>
-        <div id="scores"></div><div id="score-notes" class="notice"></div>
+        <div id="score-notes" class="notice"></div><details><summary>六维评分与原始样本明细</summary><div id="scores"></div></details>
       </section>
       <section id="decision" class="report-section decision">
         <div><p class="eyebrow">NEXT / YOUR CHOICE</p><h2 id="decision-title">选择下一步</h2><p id="decision-description">这里的选择不会执行优化。复制指令后，粘贴回 Agent 对话。</p></div>
         <div class="decision-form">
-          <fieldset id="mode-options"><legend>执行方式</legend><label><input type="radio" name="mode" value="report" checked>只要报告</label><label><input type="radio" name="mode" value="staged">逐阶段执行</label><label><input type="radio" name="mode" value="all">一次性执行</label></fieldset>
+          <p id="execution-recommendation" class="notice" hidden></p>
+          <fieldset id="mode-options"><legend>执行方式</legend><label><input type="radio" name="mode" value="all"><span id="all-mode-label">一次性执行</span></label><label><input type="radio" name="mode" value="staged">逐阶段执行</label><label><input type="radio" name="mode" value="report" checked>只要报告</label></fieldset>
           <fieldset id="stage-options"><legend>执行范围（保留原有阶段顺序与依赖）</legend><div id="stage-choices"></div></fieldset>
           <label class="control notes-control">备注<textarea id="notes" rows="3" placeholder="希望保留什么，或对方案有哪些补充？"></textarea></label>
           <p id="draft-state" class="small" role="status"></p>

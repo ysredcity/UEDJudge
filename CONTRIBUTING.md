@@ -22,6 +22,8 @@
 6. 需要本机立即生效时，同步到安装目录（当前为 `~/.kiro/skills/ued-judge` → `~/.agents/skills/ued-judge`）：先备份到 `.ued-judge/backup/`，再 `rsync -a --delete --exclude .DS_Store skills/ued-judge/ <安装目录>/`，最后 `diff -rq` 确认一致。
 7. 共用规则变化后运行 `node scripts/sync-pro-core.mjs --write`，再 `--check`；发现删除或漂移须处理，不允许带过期副本发布。Pro 仅改报告模板时不改普通版。运行 `node --test tests/pro-report.test.mjs` 验证数据、派生展示、安全、独立交付及一致性；浏览器交互须另行实测。
 
+Pro 报告交互回归可用已有 Playwright：`PLAYWRIGHT_PATH=<已安装的playwright模块路径> node --test tests/pro-report.test.mjs`。未设置时浏览器组明确跳过，不代表验证通过；不为报告测试修改被评估项目依赖。测试用合成夹具，不代替最新 skill 的真实优化实跑。
+
 ### 校准集验证（改 `critic-prompt.md` / `verifier-prompt.md` 前必做）
 
 冻结正文决定评分口径，改动前先在测试案例上验证，不能只做静态检查：
@@ -53,7 +55,7 @@
 
 ## 七、版本与打包
 
-- 整体版本采用 `x.y.z`：`x` 大版本、`y` 优化迭代、`z` 问题修复；提升 `x` 时 `y/z` 归零，提升 `y` 时 `z` 归零。当前版本为 `1.4.2`（首次统一基线为 `1.3.0`），后续修复为 `1.4.3`，下一次优化为 `1.5.0`。
+- 整体版本采用 `x.y.z`：`x` 大版本、`y` 优化迭代、`z` 问题修复；提升 `x` 时 `y/z` 归零，提升 `y` 时 `z` 归零。当前版本为 `1.5.0`（首次统一基线为 `1.3.0`），后续修复为 `1.5.1`，下一次优化为 `1.6.0`。
 - 发布时先更新 `SKILL.md` 的 `metadata.version`，再同步 README 当前版本与 CHANGELOG 对应条目；后续新改动放在 Unreleased，不改写已发布版本的历史记录。
 - 整体版本变更不自动重编号 critic / verifier 冻结正文，也不改变评分口径；确需修改冻结正文时仍执行校准协议。
 - ZIP 放根目录 `releases/`，命名为 `ued-judge-<x.y.z>.zip`；同一版本多个快照可附日期或构建标识，不用评分正文版本替代整体版本。保留旧包，不静默覆盖。

@@ -54,6 +54,10 @@
     });
     el.append(body); wrap.append(el); return wrap;
   }
+  function detail(label, content, open = false) {
+    const el = node('details'); el.open = open;
+    el.append(node('summary', label), content); return el;
+  }
   const number = value => value === null ? '无法汇总' : String(value);
   const sample = value => value === null ? '无法判定' : String(value);
   function toast(message) {
@@ -155,17 +159,35 @@
   $('zoom').addEventListener('click', () => { actual = !actual; drawScreens(); });
 
   if (comparison) {
-    $('goal').append(node('p', `务实目标：${data.goal.result}`, 'goal-result'), table('务实目标逐条结果', ['条件', '结果', '证据'], data.goal.conditions.map(c => [c.title, c.result, c.evidence])));
+    const goalRows = conditions => conditions.map(c => [c.title, c.result, c.evidence]);
+    const exceptions = data.goal.conditions.filter(c => c.result !== '通过');
+    $('goal').append(node('p', `务实目标：${data.goal.result}`, 'goal-result'));
+    if (exceptions.length) $('goal').append(table('未通过或无法判定的目标条件', ['条件', '结果', '证据'], goalRows(exceptions)));
+    $('goal').append(detail('查看全部四项目标条件', table('务实目标逐条结果', ['条件', '结果', '证据'], goalRows(data.goal.conditions))));
     const solved = data.verification.filter(v => v.result === '已解决').length;
     const unknown = data.verification.filter(v => v.result === '无法判断').length;
     const denominator = data.verification.length - unknown;
     $('verification').append(node('p', `差距核验：已解决 ${solved} / 部分解决 ${data.verification.filter(v => v.result === '部分解决').length} / 未解决 ${data.verification.filter(v => v.result === '未解决').length} / 无法判断 ${unknown}；解决率 ${denominator ? `${Math.round(solved / denominator * 100)}%（按 ${denominator} 条可判定差距计算，不代表全部目标达成）` : '无法计算'}`, 'notice'));
-    $('pair-results').append(table('成对比较与归因', ['维度', '结果 / 把握', '指向本轮改动', '判定', '证据'], data.pairResults.map(p => [data.dimensions[p.dimension], `${p.result} / ${p.confidence}`, p.attributed ? '是' : '否', p.judgment, p.evidence])));
+    const pairTable = (title, results) => table(title, ['维度', '结果 / 把握', '指向本轮改动', '判定', '证据'], results.map(p => [data.dimensions[p.dimension], `${p.result} / ${p.confidence}`, p.attributed ? '是' : '否', p.judgment, p.evidence]));
+    const judgments = [...new Set(data.pairResults.map(p => p.judgment))];
+    $('pair-results').append(node('p', `成对比较：${judgments.map(j => `${j} ${data.pairResults.filter(p => p.judgment === j).length} 项`).join(' / ')}。`, 'notice'));
+    const pairExceptions = data.pairResults.filter(p => p.result === '旧版更好' || p.result === '无效');
+    if (pairExceptions.length) $('pair-results').append(pairTable('退步与无效比较（不计为改善）', pairExceptions));
+    $('pair-results').append(detail('查看六维比较与归因证据', pairTable('成对比较与归因', data.pairResults)));
   }
-  if (data.checks.length) $('checks').append(table('主控检查（独立于评分）', ['检查', '结果', '证据'], data.checks.map(c => [`检查 ${c.id} · ${c.title}`, c.result, c.evidence])));
+  if (data.checks.length) {
+    const checkTable = (title, checks) => table(title, ['检查', '结果', '证据'], checks.map(c => [`检查 ${c.id} · ${c.title}`, c.result, c.evidence]));
+    const exceptions = data.checks.filter(c => !['通过', '不适用'].includes(c.result));
+    $('checks').append(node('p', `主控检查 ${data.checks.length} 项：通过 ${data.checks.filter(c => c.result === '通过').length} / 不适用 ${data.checks.filter(c => c.result === '不适用').length} / 其余 ${exceptions.length}（如下逐条保留）。`, 'notice'));
+    if (exceptions.length) $('checks').append(checkTable('未通过与无法判定检查', exceptions));
+    $('checks').append(detail('查看完整主控检查', checkTable('主控检查（独立于评分）', data.checks)));
+  }
   else $('checks').append(node('p', '结构化检查清单为空：检查汇总与无法判定原因见下方完整内容。', 'notice'));
   for (const section of data.sections) {
-    const block = node('section', undefined, 'content-block'); block.append(node('h3', section.title), node('pre', section.body)); $('sections').append(block);
+    const block = node('section', undefined, 'content-block'); block.append(node('h3', section.title));
+    if (section.summary) block.append(node('p', section.summary));
+    // 旧报告没有人工摘要时，展开原文，避免把风险或授权边界意外隐藏。
+    block.append(detail('详细依据', node('pre', section.body), !section.summary)); $('sections').append(block);
   }
   for (const [index, stage] of data.stages.entries()) {
     const block = node('article', undefined, 'stage'), title = node('div', undefined, 'stage-title'), items = node('div');
@@ -177,6 +199,8 @@
     block.append(title, items); $('stages').append(block);
   }
   if (!data.stages.length) $('stages').append(node('p', '本次没有可执行阶段；原因见能力边界和完整报告。', 'notice'));
+  $('stage-details').open = !comparison;
+  $('stage-summary').textContent = comparison ? `本轮 ${data.stages.length} 个阶段的动作、目标与状态` : '阶段动作与可观察目标（执行前阅读）';
   const before = data.scoreDisplay.before, after = data.scoreDisplay.after;
   const rows = Object.keys(data.dimensions).map(k => comparison
     ? [data.dimensions[k], data.scores.before[k].map(sample).join(' / '), number(before.means[k]), sample(data.scores.after[k][0])]
@@ -185,6 +209,8 @@
   $('scores').append(table('原始样本与参考换算', comparison ? ['维度', '初评双样本', '初评平均', '收尾单样本'] : ['维度', '样本 1', '样本 2', '平均'], rows, [1, 2, 3]));
   $('score-notes').append(node('p', `初评参考 ${number(before.ten)} / 10${comparison ? ` → 收尾参考 ${number(after.ten)} / 10（双样本平均与单样本，不直接定性）` : '（双样本平均）'}`));
   if (before.unstable.length) $('score-notes').append(node('p', `评分不稳定：${before.unstable.map(k => data.dimensions[k]).join('、')}（两样本维度差 ≥2）。`));
+  const unknownScores = Object.keys(data.dimensions).filter(k => data.scores.before[k].includes(null) || (comparison && data.scores.after[k].includes(null)));
+  if (unknownScores.length) $('score-notes').append(node('p', `存在无法判定的评分：${unknownScores.map(k => data.dimensions[k]).join('、')}；不以零分或通过代替。`));
   data.scores.notes.forEach(n => $('score-notes').append(node('p', n)));
   for (const review of data.rawReviews) {
     const details = node('details', undefined, 'review'); details.append(node('summary', review.label), node('pre', review.body)); $('reviews').append(details);
@@ -218,6 +244,13 @@
     $('decision-title').textContent = '留下反馈'; $('decision-description').textContent = '复制备注回 Agent 对话，不会自动开始新诊断、应用改动或回退。';
     $('mode-options').hidden = true; $('decision-link').textContent = '留下反馈'; $('copy-feedback').textContent = '复制报告反馈';
   }
+  const executable = !comparison && data.subject.canOptimize && data.stages.length > 0;
+  if (executable) {
+    const count = data.stages.length === 2 ? '两' : String(data.stages.length);
+    $('all-mode-label').textContent = `推荐：一次性执行以上${count}${data.stages.length === 2 ? '' : '个'}阶段`;
+    $('execution-recommendation').textContent = '推荐按顺序完成全部阶段：逐阶段自检，最后统一复评与核验。也可逐阶段确认或只要报告；推荐不等于选择或授权。若缩小执行范围，以待复制指令中的阶段清单为准。';
+    $('execution-recommendation').hidden = false;
+  }
   for (const stage of data.stages) {
     const label = node('label'), input = node('input'); input.type = 'checkbox'; input.value = stage.id;
     input.addEventListener('change', () => { draft.stageIds = data.stages.filter(s => s.id === stage.id ? input.checked : draft.stageIds.includes(s.id)).map(s => s.id); save(); updateDecision(); });
@@ -228,6 +261,7 @@
     input.addEventListener('change', () => { draft.mode = input.value; save(); updateDecision(); });
   });
   if (!comparison && !data.subject.canOptimize) $('decision-description').textContent = `本次不能执行优化：${data.subject.reason}\n可复制报告选择与备注。`;
+  else if (!comparison && !data.stages.length) $('decision-description').textContent = '本次没有可执行阶段；只可复制报告选择与备注。';
   $('notes').value = draft.notes;
   $('notes').addEventListener('input', () => { draft.notes = $('notes').value; save(); updateDecision(); });
   $('clear-draft').addEventListener('click', () => {
