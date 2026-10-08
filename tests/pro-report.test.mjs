@@ -9,13 +9,20 @@ import { validateReport, scoreSummary } from '../skills/ued-judge-pro/scripts/re
 
 const root = resolve(import.meta.dirname, '..');
 const pro = join(root, 'skills/ued-judge-pro');
+async function skillVersion(dir) {
+  const skill = await readFile(join(dir, 'SKILL.md'), 'utf8');
+  const version = skill.match(/^  version: "([0-9]+\.[0-9]+\.[0-9]+)"$/m)?.[1];
+  assert.ok(version, `${dir} 须有合法 metadata.version`);
+  return version;
+}
+const [coreVersion, proVersion] = await Promise.all([skillVersion(join(root, 'skills/ued-judge')), skillVersion(pro)]);
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jC6cAAAAASUVORK5CYII=', 'base64');
 const sections = ['critic', 'checks', 'protection', 'fidelity', 'limits', 'data', 'stages'];
 function fixture() {
   return {
     schemaVersion: 1, kind: 'diagnosis', runId: 'unit-01', createdAt: '2026-10-07T00:00:00Z',
     subject: { name: '测试页面', target: '本地测试', inputType: 'html', canOptimize: true, usagePathway: '界面类型：任务型工具\n用户：测试人员\n场景：日常\n核心任务：查看\n关键路径：阅读' },
-    versions: { skill: '1.0.0', core: '1.3.0', rubric: 'v3.1', verifier: 'v1', criticModel: '测试，不是实际评审' },
+    versions: { skill: proVersion, core: coreVersion, rubric: 'v3.1', verifier: 'v1', criticModel: '测试，不是实际评审' },
     capture: { viewport: { width: 1440, height: 900 }, truncated: false, coverageNote: '测试截图' },
     summary: '单元测试，不代表评审。',
     screenshots: { before: [{ id: 'before-0', role: 'overview', label: '原始总览', path: 'shot.png' }], after: [] },
@@ -70,7 +77,7 @@ test('拒绝失真输入、错误关系和诊断阶段的新截图', () => {
 test('共享副本与原版一致，普通版未嵌入 Pro 交互规则', async () => {
   execFileSync(process.execPath, ['scripts/sync-pro-core.mjs', '--check'], { cwd: root });
   const manifest = JSON.parse(await readFile(join(pro, 'core-manifest.json'), 'utf8'));
-  assert.equal(manifest.coreVersion, '1.3.0');
+  assert.equal(manifest.coreVersion, coreVersion);
   for (const [file, digest] of Object.entries(manifest.files)) {
     const source = await readFile(join(root, 'skills/ued-judge', file));
     const copy = await readFile(join(pro, file));
@@ -101,6 +108,10 @@ test('离线报告安全内嵌、拒绝覆盖、Pro 脱离普通版可生成', a
     assert.match(html, /\u003c|\\u003c/);
     assert.throws(() => execFileSync(process.execPath, cmd, { stdio: 'pipe' }));
     execFileSync(process.execPath, [...cmd, '--force']);
+    const wrongVersion = structuredClone(data);
+    wrongVersion.versions.core = '0.0.0';
+    await writeFile(join(dir, 'wrong-version.json'), JSON.stringify(wrongVersion));
+    assert.throws(() => execFileSync(process.execPath, [cmd[0], join(dir, 'wrong-version.json'), join(dir, 'wrong-version.html')], { stdio: 'pipe' }));
     data.screenshots.before[0].path = 'https://example.com/private.png';
     await writeFile(join(dir, 'remote.json'), JSON.stringify(data));
     assert.throws(() => execFileSync(process.execPath, [cmd[0], join(dir, 'remote.json'), join(dir, 'remote.html')], { stdio: 'pipe' }));

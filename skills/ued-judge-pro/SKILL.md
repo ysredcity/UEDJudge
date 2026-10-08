@@ -1,7 +1,7 @@
 ---
 name: ued-judge-pro
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 description: "UEDJudge Pro：对已有 Web 页面做与 UEDJudge 相同的隔离盲评、硬性检查与可选分阶段优化，交付本地交互诊断报告及优化前后对照报告。用户指定 UEDJudge Pro，或要求可交互、截图定位、阶段选择、前后对照的 UED 评审报告时使用。普通文字诊断使用 ued-judge；不从零生成页面、不默认生成多套改版草图。"
 ---
 

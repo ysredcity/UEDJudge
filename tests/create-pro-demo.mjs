@@ -6,6 +6,11 @@ import { renderReport } from '../skills/ued-judge-pro/scripts/render-report.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const out = join(root, '_tests/outputs/tc1-test-daily-report/pro-demo');
+const pro = join(root, 'skills/ued-judge-pro');
+const manifest = JSON.parse(await readFile(join(pro, 'core-manifest.json'), 'utf8'));
+const proVersion = (await readFile(join(pro, 'SKILL.md'), 'utf8')).match(/^  version: "([0-9]+\.[0-9]+\.[0-9]+)"$/m)?.[1];
+if (!proVersion) throw Error('Pro 缺少合法 metadata.version');
+const deliveryNote = `本次报告交付工具为 Pro ${proVersion} / core ${manifest.coreVersion}；这不是历史评审所用版本，不代表用新规则重评。`;
 const original = await readFile(join(root, '_tests/outputs/tc1-test-daily-report/REPORT-v3run.md'), 'utf8');
 const disclaimer = '历史 TC1 材料的报告展示测试（2026-10-05，评分口径 v3），未用最新规则重新诊断或优化；原始评委全文未保存，以下摘录来自试跑记录，不伪装为原始评语。';
 const shotSet = (prefix, side) => Array.from({ length: 4 }, (_, i) => ({
@@ -16,11 +21,11 @@ const beforeScores = { A: [3, 3], B: [3, 3], C: [3, 2], D: [2, 2], E: [2, 2], F:
 const diagnostic = {
   schemaVersion: 1, kind: 'diagnosis', runId: 'tc1-history-demo-20261007', createdAt: '2026-10-07T00:00:00Z',
   subject: { name: 'TC1 · 测试日报看板', target: '_tests/cases/tc1-test-daily-report/index.html（历史快照）', inputType: 'html', canOptimize: false, reason: '本页是历史报告展示测试，不是新一轮已授权优化。', usagePathway: '界面类型：任务型工具\n用户：测试负责人\n场景：日常核查和日报整理\n核心任务：查看未回归需求和风险、整理日报\n关键路径：配置 → 查看指标与清单 → 核查风险 → 整理日报\n（展示用描述；历史冻结使用途径全文未保存，不用于新评分）' },
-  versions: { skill: '1.0.0', core: '1.3.0', rubric: 'v3（历史试跑）', verifier: 'v1', criticModel: 'general-task-execution；历史模型未能显式锁定' },
+  versions: { skill: proVersion, core: manifest.coreVersion, rubric: 'v3（历史试跑）', verifier: 'v1', criticModel: 'general-task-execution；历史模型未能显式锁定' },
   capture: { viewport: { width: 1440, height: 900 }, truncated: false, coverageNote: '现有历史总览及 3 张切片；此处不代替新诊断' },
   summary: `${disclaimer}\n原试跑初评平均 16.5/24（6.9/10），五条合并差距全部高置信。`,
   screenshots: { before: shotSet('shot-40', 'before'), after: [] },
-  scores: { before: beforeScores, notes: [disclaimer, '缺失原始逐项评语，不编造勾选表。总分不代表最新 skill 的效果。'] },
+  scores: { before: beforeScores, notes: [disclaimer, deliveryNote, '缺失原始逐项评语，不编造勾选表。总分不代表最新 skill 的效果。'] },
   gaps: [
     { id: 'G1', text: '凭证常驻展开', dimension: 'B · P1/P2', severity: 'P1', confidence: '高', stageId: 'stage-1', locations: { before: { shotId: 'before-1' } } },
     { id: 'G2', text: '配置标签语义不清', dimension: 'F · P1 / B · P2', severity: 'P1', confidence: '高', stageId: null, locations: { before: { shotId: 'before-1' } } },
