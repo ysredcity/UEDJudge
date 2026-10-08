@@ -1,7 +1,7 @@
 ---
 name: ued-judge
 metadata:
-  version: "1.4.1"
+  version: "1.4.2"
 description: "UED 评价师（UEDJudge）：对已开发完成的 Web 系统、网页做用户体验诊断与可选优化。流程是先诊断再决定是否优化：主控 agent 用自带脚本截取整页总览与视口切片，写中性的使用途径（含界面类型：任务型工具 / 品牌展示），在全新隔离上下文中唤起两个评论员子智能体盲评（只看截图和使用途径，给出审美方向、顶尖水准设想、最多 5 条带维度与 P0–P3 严重度的差距、做得好的地方，以及 24 条可观察勾选项计出的 6 维度 0–4 分），同时独立跑硬性检查（合规项、控件几何对齐、可机检反模式、认知负荷计数）；再把问题归纳为 1-3 个带目标状态的改进阶段，在对话中输出诊断报告后停下，由用户选择只要报告、逐阶段执行或一次性执行。执行前写目标设计稿，每阶段主控截图自检，复评用随机 A/B 的成对比较，收尾由独立核验员逐条核对差距是否解决，以务实目标判定成败。子智能体调用有硬上限（最多 7 次）。当用户要评估、评审、诊断、打分或优化一个已有网页 / Web 系统 / 看板 / 落地页的体验、视觉或设计质量，或问「这个页面怎么样、哪里不好、怎么改得更好」时使用。不用于从零生成新界面。"
 ---
 
@@ -56,11 +56,11 @@ Step 8 收尾：核验员逐条核对 G1…Gn + 成对比较 + 一次绝对评�
 | [critic-protocol.md](references/critic-protocol.md) | 全流程、角色、维度判定、务实目标、隔离规则、成本上限 | 每次使用都读 |
 | [critic-prompt.md](references/critic-prompt.md) | 冻结评论员 prompt：正文 A 绝对评分（24 勾选项）、正文 B 成对比较 | Step 3、Step 7 复评、Step 8，逐字复用 |
 | [verifier-prompt.md](references/verifier-prompt.md) | 冻结核验员 prompt：逐条核对初评差距是否解决，不打分 | Step 8 |
-| [hard-checks.md](references/hard-checks.md) | 硬性检查 H 合规 / G 布局几何 / A 反模式 / L 认知负荷 | Step 4 与每阶段回归 |
+| [hard-checks.md](references/hard-checks.md) | 硬性检查 H 合规与工程要求（H2 区分按钮/输入、H7 图标、H9 悬停）/ G 布局几何 / A 反模式 / L 认知负荷 | Step 4 与每阶段回归 |
 | [glossary.md](references/glossary.md) | 问题标签、维度对应、界面类型口径、AI 感套路与常见通病、修复方向 | Step 5 归纳阶段、Step 5.5 确认修复方向 |
 | [report-template.md](references/report-template.md) | 诊断报告 / 阶段复评简报 / 收尾报告 | Step 6、7、8 |
 | [execution-constraints.md](references/execution-constraints.md) | 执行约束 X1–X15、保真细则、实测教训附录 | Step 5.5、Step 7 |
-| [visual-optimization.md](references/visual-optimization.md) | 视觉契约、配色/表面层级、低噪控件识别、指标整体性与密度 | 配色单调、强调混乱、分组松散、控件偏大或目标涉及视觉关系时 |
+| [visual-optimization.md](references/visual-optimization.md) | 视觉契约、配色/表面层级、按钮与输入识别、操作图标、低噪悬停、指标整体性与密度 | 配色/分组有问题、控件偏大、图标偏小、悬停反馈不足或目标涉及视觉关系时 |
 | [motion-optimization.md](references/motion-optimization.md) | 展开收起、筛选更新、短操作反馈、异步操作四类案例与 M 组验证 | 关键路径含动效，或反馈、过渡、连续操作存在问题时；静态截图不代替时序验证 |
 | [web-interface-quality.md](references/web-interface-quality.md) | W 组补充检查与响应式根因排查 | 关键路径涉及输入、异步、导航或性能问题，或窄屏/缩放/内容变化导致布局故障时 |
 | [scripts/capture.mjs](scripts/capture.mjs) | 固定参数截图：整页总览 + 视口切片 | Step 2 与每次复评前 |

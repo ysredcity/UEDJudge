@@ -1,7 +1,7 @@
 ---
 name: ued-judge-pro
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 description: "UEDJudge Pro：对已有 Web 页面做与 UEDJudge 相同的隔离盲评、硬性检查与可选分阶段优化，交付本地交互诊断报告及优化前后对照报告。用户指定 UEDJudge Pro，或要求可交互、截图定位、阶段选择、前后对照的 UED 评审报告时使用。普通文字诊断使用 ued-judge；不从零生成页面、不默认生成多套改版草图。"
 ---
 
@@ -19,7 +19,7 @@ description: "UEDJudge Pro：对已有 Web 页面做与 UEDJudge 相同的隔离
 
 ## 执行参考按问题加载
 
-主控按当前问题查阅共用副本，不要求每次读完三份参考：配色、表面层级、低噪控件识别、指标整体性或密度问题见 [visual-optimization.md](references/visual-optimization.md)；展开、筛选更新、短操作反馈或异步过渡见 [motion-optimization.md](references/motion-optimization.md)；输入、导航、性能或响应式故障见 [web-interface-quality.md](references/web-interface-quality.md)。这些是方法参考，不新增评分、阶段、确认闸门或组件模板，不传给评论员；核心流程与检查仍按协议逐步读取。
+主控按当前问题查阅共用副本，不要求每次读完三份参考：配色、表面层级、按钮与输入识别、图标偏小、悬停反馈不足、指标整体性或密度问题见 [visual-optimization.md](references/visual-optimization.md)，主控检查对应 H2/H7/H9；展开、筛选更新、短操作反馈或异步过渡见 [motion-optimization.md](references/motion-optimization.md)；输入、导航、性能或响应式故障见 [web-interface-quality.md](references/web-interface-quality.md)。这些是方法参考，不新增评分、阶段、确认闸门或组件模板，不传给评论员；核心流程与检查仍按协议逐步读取。
 
 ## 报告交付覆盖
 
